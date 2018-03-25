@@ -48,12 +48,9 @@ RUN apt-get install -y \
 
 RUN apt-get install apache2 libapache2-mod-php7.0 -y
 
-ENV LOG_STDOUT **Boolean**
-ENV LOG_STDERR **Boolean**
 ENV LOG_LEVEL warn
 ENV ALLOW_OVERRIDE All
 ENV DATE_TIMEZONE UTC
-ENV TERM dumb
 
 COPY index.html /var/www/html/
 COPY run-server.sh /usr/sbin/
