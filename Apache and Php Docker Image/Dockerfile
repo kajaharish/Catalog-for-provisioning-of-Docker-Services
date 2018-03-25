@@ -53,7 +53,7 @@ ENV LOG_STDERR **Boolean**
 ENV LOG_LEVEL warn
 ENV ALLOW_OVERRIDE All
 ENV DATE_TIMEZONE UTC
-ENV TERM dumb
+ENV TERM DUMB
 
 COPY index.html /var/www/html/
 COPY run-server.sh /usr/sbin/

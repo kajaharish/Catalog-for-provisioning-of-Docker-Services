@@ -32,11 +32,12 @@ fi
 if [ ! $LOG_STDOUT ]; then
 cat << EOB
     
-    *****************************************************
-    *                                            	*
-    *    Docker image: ggandhi27/apache_with_php 	*
-    *                                            	*
-    *****************************************************
+    **********************************************
+    *                                            *
+    *    Docker image: lamp               *
+    *    https://github.com/fauria/docker-lamp   *
+    *                                            *
+    **********************************************
 
     SERVER SETTINGS
     ---------------
@@ -47,17 +48,22 @@ cat << EOB
     · PHP date timezone [DATE_TIMEZONE]: $DATE_TIMEZONE
 
 EOB
-#else
-#    /bin/ln -sf /dev/stdout /var/log/apache2/access.log
+else
+    /bin/ln -sf /dev/stdout /var/log/apache2/access.log
 fi
 
 # Set PHP timezone
 /bin/sed -i "s/\;date\.timezone\ \=/date\.timezone\ \=\ ${DATE_TIMEZONE}/" /etc/php/7.0/apache2/php.ini
 
+# Run Postfix
+/usr/sbin/postfix start
+
+# Run MariaDB
+/usr/bin/mysqld_safe --timezone=${DATE_TIMEZONE}&
 
 # Run Apache:
 if [ $LOG_LEVEL == 'debug' ]; then
-    /usr/sbin/apachectl -DFOREGROUND  -k start -e debug &
+    /usr/sbin/apachectl -DFOREGROUND -k start -e debug
 else
-    &>/dev/null /usr/sbin/apachectl -DFOREGROUND  -k start &
+    &>/dev/null /usr/sbin/apachectl -DFOREGROUND -k start
 fi
