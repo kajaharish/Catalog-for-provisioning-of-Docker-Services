@@ -47,3 +47,6 @@ If you see %, well then, there's another problem altogether as that is "any remo
 
 msyql> CREATE USER 'root'@'%' IDENTIFIED BY 'some_pass';
 mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
+
+Password for root user in database of mysql CONTAINER :
+123456
