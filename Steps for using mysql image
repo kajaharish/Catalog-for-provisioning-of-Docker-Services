@@ -1,0 +1,49 @@
+shell> docker pull mysql/mysql-server:tag
+
+shell> docker images
+
+docker run --name=mysql1 -d mysql/mysql-server:tag
+
+shell> docker ps
+
+CONTAINER ID   IMAGE                COMMAND                  CREATED             STATUS                              PORTS                NAMES
+a24888f0d6f4   mysql/mysql-server   "/entrypoint.sh my..."   14 seconds ago      Up 13 seconds (health: starting)    3306/tcp, 33060/tcp  mysql1
+
+The -d option used in the docker run command above makes the container run in the background.
+Use this command to monitor the output from the container
+
+shell> docker logs mysql1
+
+Once initialization is finished, the command's
+output is going to contain the random password
+generated for the root user; check the password with,
+for example, this command:
+
+shell> docker logs mysql1 2>&1 | grep GENERATED
+GENERATED ROOT PASSWORD: Axegh3kAJyDLaRuBemecis&EShOs
+
+shell> docker exec -it mysql1 mysql -u root -p
+
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'newpassword';
+
+
+mysql> SELECT host FROM mysql.user WHERE User = 'root';
++---------------------------------------------+
+| host                                        |
++---------------------------------------------+
+| %                                           |
+| 127.0.0.1                                   |
+| ::1                                         | |
+| localhost                                   |
++---------------------------------------------+
+5 rows in set (0.00 sec)
+
+You will need to add the IP address of each system that you want to grant access to, and then grant privileges:
+
+mysql> CREATE USER 'root'@'ip_address' IDENTIFIED BY 'some_pass';
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'ip_address';
+
+If you see %, well then, there's another problem altogether as that is "any remote source". If however you do want any/all systems to connect via root, use the % wildcard to grant access:
+
+msyql> CREATE USER 'root'@'%' IDENTIFIED BY 'some_pass';
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
