@@ -2957,7 +2957,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFiXqo4idqR/0U="
 							},
-							"name": "date",
+							"name": "payment_date",
 							"type": "date",
 							"length": 0,
 							"primaryKey": false,
@@ -2971,7 +2971,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFiXqo4idqR/0U="
 							},
-							"name": "time",
+							"name": "payment_time",
 							"type": "time",
 							"length": 0,
 							"primaryKey": false,
