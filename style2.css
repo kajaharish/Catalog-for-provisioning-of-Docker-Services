@@ -1,0 +1,76 @@
+<<<<<<< HEAD
+
+
+
+
+.container-login100 {
+}
+
+.wrap-login100 {
+  width: 500px;
+  margin: auto;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 7px 55px 33px 55px;
+  
+
+  box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+  -o-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+  -ms-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.oval100 {
+  width: 160px;
+  height: 50px;
+  background: #000000;
+  border-radius: 40px;
+}
+
+
+
+.input100 {
+  font-family: Poppins-Regular;
+  font-size: 15px;
+  
+  line-height: 1.2;
+
+  display: block;
+  width: 100%;
+  height: 4px;
+  border: none;
+border-color: transparent;
+ 
+
+}
+
+
+.input100 {
+  font-family: Poppins-Regular;
+  font-size: 15px;
+  
+  line-height: 1.2;
+
+  display: block;
+  width: 100%;
+  height: 45px;
+  border: none;
+border-color: transparent;
+
+}
+
+.wrap-input100 {
+  width: 100%;
+  position: relative;
+  border-bottom: 2px solid #adadad;
+  margin-bottom: 37px;
+}
+.drop-down	{
+	border-radius: 10px;
+	border: 2px solid #B0ADB0;
+	padding-top: 10px;
+	padding-left: 20px;
+	padding-bottom: 15px;
+}
