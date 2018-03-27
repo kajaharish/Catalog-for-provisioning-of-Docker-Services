@@ -1,0 +1,17 @@
+******************************************************
+LOGIN table description:
+
+username varchar(50) Primary key
+password varchar(20) Not null
+security_ques varchar(20) Not null
+security_ans varchar(10)  Not null
+
+******************************************************
+
+SESSION table description:
+
+username varchar(35) Foreign key
+session_id varchar(35) Primary key
+
+******************************************************
+
