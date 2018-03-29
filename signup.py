@@ -3,20 +3,17 @@ import cgi, cgitb
 import MySQLdb
 print ("Content-type:text/html\n\n")
 
-
-
-
 def connectDB():
     db = MySQLdb.connect("172.17.0.2","root","123456","minor_db")
     cursor = db.cursor()
     return (db,cursor)
 
 
-def checkUsername(cursor,username):
-    chk = cursor.execute('select * from user where username = "%s"'%username)
-    if chk == 1L:
+def checkUsername(cursor,username,email):
+    chk = cursor.execute('select * from user where username = "%s" or email = "%s"'%(username,email))
+    if chk == 1L :
         return 0
-    else :
+    else:
         return 1
 
 def fetchDetails():
@@ -38,7 +35,11 @@ def executeQuery(db,sql):
     try:
     	cursor.execute(sql)
     	db.commit()
-    	print "Data updated"
+        print('<html>')
+        print('  <head>')
+        print('    <meta http-equiv="refresh" content="0;url=http://127.0.0.1/login.html" />') 
+        print('  </head>')
+        print('</html>')
     except:
         db.rollback()
         print " Not updated"
@@ -60,14 +61,13 @@ if __name__=="__main__":
     ans = None
     db,cursor = connectDB()
     if db:
-    	print "Connection established"
-        username,fname,lname,password,address,email,ques,ans=fetchDetails()
-        chk = checkUsername(cursor,username)
+        username,fname,lname,password,address,ques,ans,email=fetchDetails()
+        chk = checkUsername(cursor,username,email)
         if chk == 1:
             sql = prepareQuery(username,fname,lname,password,address,ques,ans,email)
             executeQuery(db,sql)
         else:
-            print ("Username already exists")
+            print ("Username or Email already exists")
         closeDB()
     else:
         print "DB not connected."
