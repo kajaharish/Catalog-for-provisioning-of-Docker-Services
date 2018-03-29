@@ -2,16 +2,20 @@
 import cgi, cgitb
 import MySQLdb
 print "Content-type:text/html\n"
-db = MySQLdb.connect("localhost","root","Cascaders1@3","Minor")
+db = MySQLdb.connect("172.17.0.2","root","123456","minor_db")
 if db:
 	print "Connection established"
 	form = cgi.FieldStorage()
 	username = form.getvalue('username')
+        fname=form.getvalue('fname')
+        lname=form.getvalue('lname')
 	password = form.getvalue('password')
-	security_ques = form.getvalue('security_ques')
+        address = form.getvalue('address')
+	ques = form.getvalue('ques')
+        ans = form.getvalue('answer')
+        email = form.getvalue('email')
 	cursor = db.cursor()
-	sql= 'INSERT INTO LOGIN	VALUES ("%s","%s","%s")' % \
-	(username,password,security_ques)
+	sql= ('INSERT INTO user VALUES ("%s","%s","%s","%s","%s","%s","%s","%s")' )% (username,fname,lname,password,address,ques,ans,email)
 try:
 	cursor.execute(sql)
 	db.commit()
