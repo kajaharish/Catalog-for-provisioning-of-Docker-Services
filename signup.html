@@ -20,9 +20,12 @@
 			<br>
 			<br>
 			
-			<form action ="">
+			<form action ="/scripts/signup.py" method="get">
 			<div class="wrap-input100">
-				<input class="input100" type="text" name="name" placeholder="Name">
+				<input class="input100" type="text" name="fname" placeholder="First Name">
+			</div>
+			<div class="wrap-input100">
+				<input class="input100" type="text" name="lname" placeholder="Last Name">
 			</div>
 			
 			<div class="wrap-input100">
@@ -38,10 +41,13 @@
 				<input class="input100" type="password" name="password" placeholder="Password">
 			</div>
 			
+			<div class="wrap-input100">
+				<input class="input100" type="text" name="address" placeholder="Address">
+			</div>
 			<!--Start Drop down list-->
 			<div class="drop-down">
 				Security Question: 
-				<select>
+				<select name = "question">
 					<option value="birthplace">In Which city you were born ?</option>
 					<option value="nickname">What's Your Nickname ?</option>
 					<option value="NickName">What's the company name of your first Mobile device?</option>
