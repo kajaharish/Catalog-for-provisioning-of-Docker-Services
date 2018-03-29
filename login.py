@@ -3,22 +3,45 @@ import cgi, cgitb
 import MySQLdb
 cgitb.enable()
 print "Content-type:text/html\r\n\r\n"
-db = MySQLdb.connect("localhost","root","Cascaders1@3","Minor")
-form = cgi.FieldStorage()
-username = form.getvalue('username')
-password = form.getvalue('password')
-cursor = db.cursor()
-sql='select password from LOGIN where username="'+username+'"'
-try:
-#Execute the SQL command
-  	cursor.execute(sql)
-	results = cursor.fetchone()
-	pasw = results[0]
-	if password == pasw:
-		print "Login Successful"
-	else:
-		print "Invalid username or password"
-except:
-	print "Error: Database Error"
-#disconnect from server
-db.close()
+
+def connectDB():
+    db = MySQLdb.connect("172.17.0.2","root","123456","minor_db")
+    cursor = db.cursor()
+    return (db,cursor)
+
+def fetchDetails():
+    form = cgi.FieldStorage()
+    username = form.getvalue('username')
+    password = form.getvalue('password')
+    return (username,password)
+
+def login(cursor,username,password):
+    try:
+        #Execute the SQL command
+        sql = ('select * from user where username = "%s" and password = "%s"'%(username,password))
+        chk = cursor.execute(sql)
+        if chk == 1L:
+            print ("Login Successfull")
+        else:
+            print ("Please check the username or password")
+    except:
+        db.rollback()
+        print " Not updated"
+
+def closeDB(db):
+    db.close()
+
+
+if __name__=="__main__":
+    db = None
+    cursor = None
+    username = None
+    password = None
+    db,cursor = connectDB()
+    if db:
+        username,password = fetchDetails()
+        login(cursor,username,password)
+        closeDB(db)
+    else:
+        print ("Not able to connect to the database")
+
