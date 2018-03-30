@@ -5,7 +5,6 @@ import RandomKeyGenerator as rkg
 import CookieGenerator as cookie
 
 cgitb.enable()
-print "Content-type:text/html\r\n\r\n"
 
 
 def connectDB():
@@ -39,12 +38,16 @@ def login(db,cursor,username,password):
                         break
                 #Create Cookie.
                 cookie.genCookie(session_id)
+                print "Content-type:text/html\r\n\r\n"
                 #Update the cookie in the sessions table.
-                createSesssion(db,cursor,session_id,username)
+                createSession(db,cursor,session_id,username)
                 print ("Login Successfull")
+            else:
+                print "Content-type:text/html\r\n\r\n"
+                print "Already a session is created for the user."
         else:
             print ("Please check the username or password")
-    except:
+    except Exception as e:
         db.rollback()
         print " Not updated"
 
@@ -62,7 +65,6 @@ def checkUser(cursor,username):
     sql = "select * from session where username = '%s'"%username
     check = cursor.execute(sql)
     if check == 1L:
-        print "Already a session is created for the user."
         return 0
     else:
         return 1
