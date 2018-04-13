@@ -15,23 +15,19 @@ CREATE TABLE minor_db.user (
 CREATE TABLE minor_db.container (
     container_name varchar(35) NOT NULL,
     username varchar(35) NOT NULL,
-    container_id varchar(20) NOT NULL UNIQUE,
+    container_id varchar(70) NOT NULL UNIQUE,
     container_ip varchar(15) NOT NULL,
-    start_time varchar(10) NOT NULL,
-    end_time varchar(10) NOT NULL,
+    start_time varchar(30) NOT NULL,
+    end_time varchar(30) NOT NULL,
     web_server boolean NOT NULL,
     db_server boolean NOT NULL,
     php boolean NOT NULL,
     python boolean NOT NULL,
-    total_uptime varchar(10) NOT NULL,
-    pending_time varchar(10) NOT NULL,
+    total_uptime varchar(30) NOT NULL,
     PRIMARY KEY (container_name),
     FOREIGN KEY (username) REFERENCES user(username)
 );
 
-
-ALTER TABLE minor_db.container
-    ADD UNIQUE (container_id);
 
 CREATE INDEX ON minor_db.container
     (username);
