@@ -1,14 +1,13 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 import cgi, cgitb
 import MySQLdb
 import RandomKeyGenerator as rkg
 import CookieGenerator as cookie
 
-cgitb.enable()
 
 
 def connectDB():
-    db = MySQLdb.connect("172.17.0.2","root","123456","minor_db")
+    db = MySQLdb.connect("172.17.0.3","root","123456","minor_db")
     cursor = db.cursor()
     return (db,cursor)
 
@@ -49,10 +48,10 @@ def login(db,cursor,username,password):
             print ("Please check the username or password")
     except Exception as e:
         db.rollback()
-        print " Not updated"
+        print "Not updated"
 
 
-def checkSessionId(cursorn,session_id):
+def checkSessionId(cursor,session_id):
     sql = "select * from session where session_id = '%s'"%session_id
     check = cursor.execute(sql)
     if check == 1L:
@@ -87,15 +86,17 @@ def closeDB(db):
 
 
 if __name__=="__main__":
+    cgitb.enable()
     db = None
     cursor = None
     username = None
     password = None
     db,cursor = connectDB()
     if db:
-        username,password = fetchDetails()
+        #username,password = fetchDetails()
+        username = "ggandhi27"
+        password = "123456"
         login(db,cursor,username,password)
         closeDB(db)
     else:
         print ("Not able to connect to the database")
-
