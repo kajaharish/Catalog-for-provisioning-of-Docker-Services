@@ -43,6 +43,35 @@ def callLoginPage():
     print('  </head>')
     print('</html>')
 
+def connectUserDB(username,password,database):
+    userDB = MySQLdb.connect("172.17.0.3",username,password,database)
+    userCursor = db.cursor()
+    return (userDB,userCursor)
+
+def userDatabaseOperations(username,password,database,query):
+
+    userDB,userCursor = connectUserDB(username,password,database)
+    result = None
+    if userDB :
+        #print  "User database connected successfully."
+        
+        result = executeUserQuery(userCursor,query)
+        return result
+    else:
+        return "Problem connecting the user database."
+
+
+def executeUserQuery(userCursor,query):
+    try:
+        check = userCursor.execute(query)
+        result = ""
+        result = userCursor.fetchall()
+        print (result)
+        return result
+    except MySQLdb.Error,e:
+        return e
+
+
 if __name__  == "__main__":
     
     cgitb.enable()
@@ -68,14 +97,23 @@ if __name__  == "__main__":
         cursor = None
         username = None
         password = None
-        
+        database = None
+        result = None
+
         db,cursor = connectDB()
         
         if db:        
-            username = getUserName(cursor,sessionId)
+            username = getUserName(cursor,sessionId)[0]
         
-            password = getPassword(cursor,username)
-        
+            password = getPassword(cursor,username)[0]
+            
+            #This function is needed to be defined.
+            #database = getDatabase(username)
+            database = "test_db"
+
+            result = userDatabaseOperations(username,password,database,query)
+            
+
             print ('''
 <!DOCTYPE html>
 
@@ -106,10 +144,12 @@ if __name__  == "__main__":
             <h3>Output : </h3>
             </hr>
 ''')
-            print("<h4>%s</h4></br>"%query)
+            print("<h4>Result : %s</h4></br>"%result)
             print ("<h4>%s</h4></br>"%username)
             print ("<h4>%s</h4></br>"%password)
             print ("""
 </body>
 </html>
 """)
+        else:
+            print "No database connectivity at the server level."
