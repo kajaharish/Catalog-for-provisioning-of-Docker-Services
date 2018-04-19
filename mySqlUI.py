@@ -45,7 +45,7 @@ def callLoginPage():
 
 def connectUserDB(username,password,database):
     userDB = MySQLdb.connect("172.17.0.3",username,password,database)
-    userCursor = db.cursor()
+    userCursor = userDB.cursor()
     return (userDB,userCursor)
 
 def userDatabaseOperations(username,password,database,query):
@@ -54,20 +54,28 @@ def userDatabaseOperations(username,password,database,query):
     result = None
     if userDB :
         #print  "User database connected successfully."
-        
-        result = executeUserQuery(userCursor,query)
+        result = executeUserQuery(userCursor,userDB,query)
         return result
     else:
         return "Problem connecting the user database."
 
 
-def executeUserQuery(userCursor,query):
+def executeUserQuery(userCursor,userDB,query):
     try:
         check = userCursor.execute(query)
         result = ""
-        result = userCursor.fetchall()
-        print (result)
-        return result
+        if check == 0L:
+            userDB.commit()
+            return "Query is executed successfully."
+        else:
+            userDB.commit()
+            result = userCursor.fetchall()
+            string = "<br/><br/>Query executed successfully.<br/>"
+            for row in result:
+                for x in row:
+                    string = string + str(x) + "&nbsp;&nbsp;&nbsp;&nbsp;"
+                string = string + "<br/>"
+            return string
     except MySQLdb.Error,e:
         return e
 
@@ -145,8 +153,6 @@ if __name__  == "__main__":
             </hr>
 ''')
             print("<h4>Result : %s</h4></br>"%result)
-            print ("<h4>%s</h4></br>"%username)
-            print ("<h4>%s</h4></br>"%password)
             print ("""
 </body>
 </html>
