@@ -1,10 +1,12 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 import cgi, cgitb
 import MySQLdb
+import commands as cmd
+
 print ("Content-type:text/html\n\n")
 
 def connectDB():
-    db = MySQLdb.connect("172.17.0.2","root","123456","minor_db")
+    db = MySQLdb.connect("172.17.0.3","root","123456","minor_db")
     cursor = db.cursor()
     return (db,cursor)
 
@@ -44,8 +46,15 @@ def executeQuery(db,sql):
         db.rollback()
         print " Not updated"
 
-def closeDB():
+def closeDB(db):
     db.close()
+
+
+def createDatabaseUser(cursor,username,password):
+    try:
+        check = cursor.execute('create user "%s"@"172.17.0.1" identified by "%s"'%(username,password))
+    except MySQLdb.Error,e:
+        print e
 
 if __name__=="__main__":
     
@@ -66,8 +75,9 @@ if __name__=="__main__":
         if chk == 1:
             sql = prepareQuery(username,fname,lname,password,address,ques,ans,email)
             executeQuery(db,sql)
+            createDatabaseUser(cursor,username,password)
         else:
             print ("Username or Email already exists")
-        closeDB()
+        closeDB(db)
     else:
         print "DB not connected."
