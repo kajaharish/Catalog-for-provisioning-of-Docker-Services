@@ -1,5 +1,6 @@
-import commands as cmd
+import commands
 import json
+import os
 def insertdbpy(cursor,name,uname,cid,cip,stime,etime,web,db,php,py,utime):
         sql=('insert into container values("%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s")'%(name,uname,cid,cip,stime,etime,web,db,php,py,utime))
         chk=cursor.execute(sql)
@@ -9,9 +10,11 @@ def insertdbpy(cursor,name,uname,cid,cip,stime,etime,web,db,php,py,utime):
                 return 0
 
 def runpy(uname,cursor):
-	a=cmd.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker run -dt --network=mynet0 ggandhi27/apache_with_python_cgi")
+	a=commands.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker run -dt --network=mynet0 ggandhi27/apache_with_python_cgi")
+	a=a[78:]
 	if a:
 		print("<p>Container started.</p><br>")
+		print(a)
 	d=dict()
 	d=inspectpy(a)
 	chk=insertdbpy(cursor,d["Name"],uname,d["ID"],d["IP"],d["Stime"],d["Etime"],1,0,0,1,"0")
@@ -23,17 +26,27 @@ def runpy(uname,cursor):
 		return 0
 
 def inspectpy(contId):
-	print("1")
-	tmp=cmd.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker inspect %s"%contId)
+	print contId
+	print "<br>"
+	print "<br>"
+	cmd = "sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker container inspect %s"%contId
+	print cmd
+	print "<br>"
+	print "<br>"
+	tmp = commands.getoutput(cmd)
+	tmp1=tmp[78:]
+	print("")
+	print(tmp1)
 	fp=open("/tmp/tmp1.json","w")
-	fp.write(tmp)
+	print("1")
+	fp.write(tmp1)
+	fp.close()
+	print("2")
+	fp=open("/tmp/tmp1.json","r")
+	b=json.load(fp)
 	print("3")
 	fp.close()
-	fp=open("/tmp/tmp1.json","r")
-	print("1")
-	b=json.load(fp)
-	print("2")
-	fp.close()
+	print(b)
 	d=dict()
 	d["ID"]=b[0]["Id"]
 	d["IP"]=b[0]["NetworkSettings"]["Networks"]["mynet0"]["IPAddress"]
@@ -55,7 +68,11 @@ def insertdbphp(cursor,name,uname,cid,cip,stime,etime,web,db,php,py,utime):
                 return 0
 
 def runphp(uname,cursor):
-	a=cmd.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker run -dt --network=mynet0 ggandhi27/apache_with_php")
+	a=commands.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker run -dt --network=mynet0 ggandhi27/apache_with_php")
+	a=a[77:]
+	if a:
+		print("Container running.")
+		print(a)
 	d=inspectphp(a)
 	chk=insertdbphp(cursor,d["Name"],uname,d["ID"],d["IP"],d["Stime"],d["Etime"],1,0,1,0,"0")
 	if chk==1:
@@ -65,10 +82,11 @@ def runphp(uname,cursor):
 		print("<p>There is some problem starting the container.</p><br>")
 		return 0
 
-def inspectphp(name):
-	tmp=cmd.getstatusoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker inspect %s"%name)
+def inspectphp(contId):
+	tmp=commands.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker inspect '%s'"%contId)
+	tmp1=tmp[78:]
 	fp=open("/tmp/tmp1.json","w")
-	fp.write(tmp[1])
+	fp.write(tmp1)
 	fp.close()
 	fp=open("/tmp/tmp1.json","r")
 	b=json.load(fp)
@@ -85,17 +103,18 @@ def inspectphp(name):
 	else:
 		return 0
 
-def start_cont(name):
-        chk=cmd.getoutput('sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker start %s'%name)
+def start_cont(contId):
+        chk=commands.getoutput('sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker start "%s"'%contId)
         if chk==name:
-                tmp=cmd.getstatusoutput('sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker inspect %s'%name)
-                fp=open("/tmp/tmp3.json","w")
-                fp.write(tmp[1])
-                fp.close()
-                fp=open("/tmp/tmp3.json","r")
-                b=json.load(fp)
-                fp.close()
-                d=dict()
+		tmp=commands.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker inspect '%s'"%contId)
+		tmp1=tmp[78:]
+		fp=open("/tmp/tmp1.json","w")
+		fp.write(tmp1)
+		fp.close()
+		fp=open("/tmp/tmp1.json","r")
+		b=json.load(fp)
+		fp.close()
+		d=dict()
                 d["Stime"]=b[0]["State"]["StartedAt"]
                 d["Etime"]=b[0]["State"]["FinishedAt"]
                 d["Status"]=b[0]["State"]["Status"]
@@ -114,16 +133,17 @@ def startdb(cursor,name,stime,etime):
                 return 0
 
 def stop_cont(name):
-        chk=cmd.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker stop %s"%name)
+        chk=commands.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker stop '%s'"%name)
         if chk==name:
-                tmp=cmd.getstatusoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker inspect %s"%name)
-                fp=open("/tmp/tmp2.json","w")
-                fp.write(tmp[1])
-                fp.close()
-                fp=open("/tmp/tmp2.json","r")
-                b=json.load(fp)
-                fp.close()
-                d=dict()
+		tmp=commands.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker inspect '%s'"%name)
+		tmp1=tmp[78:]
+		fp=open("/tmp/tmp1.json","w")
+		fp.write(tmp1)
+		fp.close()
+		fp=open("/tmp/tmp1.json","r")
+		b=json.load(fp)
+		fp.close()
+		d=dict()
                 d["Stime"]=b[0]["State"]["StartedAt"]
                 d["Etime"]=b[0]["State"]["FinishedAt"]
                 d["Status"]=b[0]["State"]["Status"]
@@ -142,7 +162,7 @@ def stopdb(cursor,name,etime,utime):
                 return 0
 
 def remove_cont(name):
-        chk=cmd.getoutput('sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker rm %s'%name)
+        chk=commands.getoutput('sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker rm "%s"'%name)
         if chk==name:
                 return 1
         else:
