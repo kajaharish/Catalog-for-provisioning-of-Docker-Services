@@ -4,10 +4,8 @@ import MySQLdb
 import RandomKeyGenerator as rkg
 import CookieGenerator as cookie
 
-
-
 def connectDB():
-    db = MySQLdb.connect("172.17.0.3","root","123456","minor_db")
+    db = MySQLdb.connect("172.10.20.1","root","123456","minor_db")
     cursor = db.cursor()
     return (db,cursor)
 
@@ -93,9 +91,7 @@ if __name__=="__main__":
     password = None
     db,cursor = connectDB()
     if db:
-        #username,password = fetchDetails()
-        username = "ggandhi27"
-        password = "123456"
+        username,password = fetchDetails()
         login(db,cursor,username,password)
         closeDB(db)
     else:

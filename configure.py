@@ -25,8 +25,7 @@ def runpy(uname,name,cursor):
 		return 0
 
 def inspectpy(contId):
-	print "<br>"
-	print "<br>"
+	print "<br><br>"
 	cmd = "sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker container inspect"
 	cmd1=cmd+" "+contId
 	print("<br><br>")
@@ -60,7 +59,7 @@ def insertdbphp(cursor,name,uname,cid,cip,stime,etime,web,db,php,py,utime):
                 return 0
 
 def runphp(uname,name,cursor):
-	a=commands.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker run -dt --network=mynet0 ggandhi27/apache_with_php")
+	a=commands.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker run -dt --network=mynet0 --name=%s ggandhi27/apache_with_php"%name)
 	a=a[78:]
 	if a:
 		print("Container running.")
@@ -73,22 +72,27 @@ def runphp(uname,name,cursor):
 		print("<p>There is some problem starting the container.</p><br>")
 		return 0
 
-def inspectphp(contId):
-	tmp=commands.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker inspect '%s'"%contId)
+def inspectphp(name):
+	print "<br><br>"
+	cmd = "sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker container inspect"
+	cmd1=cmd+" "+name
+	print("<br><br>")
+	tmp = commands.getoutput(cmd1)
+	print("<br><br>")
 	tmp1=tmp[78:]
-	fp=open("/tmp/runphp.json","w")
+	fp=open("/tmp/runpy.json","w")
 	fp.write(tmp1)
 	fp.close()
-	fp=open("/tmp/runphp.json","r")
+	fp=open("/tmp/runpy.json","r")
 	b=json.load(fp)
 	fp.close()
 	d=dict()
 	d["ID"]=b[0]["Id"]
-	d["Name"]=b[0]["Name"]
 	d["IP"]=b[0]["NetworkSettings"]["Networks"]["mynet0"]["IPAddress"]
 	d["Status"]=b[0]["State"]["Status"]
 	d["Stime"]=b[0]["State"]["StartedAt"]
 	d["Etime"]=b[0]["State"]["FinishedAt"]
+	d["Name"]=b[0]["Name"]
 	if d["Status"]=="running":
 		return d
 	else:
@@ -96,7 +100,8 @@ def inspectphp(contId):
 
 def start_cont(name):
         chk=commands.getoutput('sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker start "%s"'%name)
-        if chk==name:
+        chk=chk[78:]	
+	if chk:
 		tmp=commands.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker inspect '%s'"%name)
 		tmp1=tmp[78:]
 		fp=open("/tmp/start.json","w")
@@ -106,16 +111,17 @@ def start_cont(name):
 		b=json.load(fp)
 		fp.close()
 		d=dict()
-                d["Stime"]=b[0]["State"]["StartedAt"]
-                d["Etime"]=b[0]["State"]["FinishedAt"]
-                d["Status"]=b[0]["State"]["Status"]
+		d["ID"]=b[0]["Id"]
+		d["Stime"]=b[0]["State"]["StartedAt"]
+		d["Etime"]=b[0]["State"]["FinishedAt"]
+		d["Status"]=b[0]["State"]["Status"]
 		d["IP"]=b[0]["NetworkSettings"]["Networks"]["mynet0"]["IPAddress"]
-                if d["Status"]=="running":
-                        return d
-                else:
-                        print("Container not running!!")
-        else:
-                return 0
+		if d["Status"]=="running":
+			return d
+		else:
+			print("Container not running!!")
+	else:
+		return 0
 def startdb(cursor,name,stime,etime):
         sql=('update container set start_time="%s",end_time="%s" where container_name="%s"'%(stime,etime,name))
         chk=cursor.execute(sql)
@@ -126,7 +132,7 @@ def startdb(cursor,name,stime,etime):
 
 def stop_cont(name):
         chk=commands.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker stop '%s'"%name)
-        if chk==name:
+        if chk:
 		tmp=commands.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker inspect '%s'"%name)
 		tmp1=tmp[78:]
 		fp=open("/tmp/stop.json","w")
@@ -136,6 +142,7 @@ def stop_cont(name):
 		b=json.load(fp)
 		fp.close()
 		d=dict()
+		d["ID"]=b[0]["Id"]
                 d["Stime"]=b[0]["State"]["StartedAt"]
                 d["Etime"]=b[0]["State"]["FinishedAt"]
                 d["Status"]=b[0]["State"]["Status"]
@@ -155,7 +162,9 @@ def stopdb(cursor,name,etime,utime):
 
 def remove_cont(name):
         chk=commands.getoutput('sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker rm "%s"'%name)
-        if chk==name:
+        chk=chk[78:]
+	print(chk)
+	if chk:
                 return 1
         else:
                 return 0

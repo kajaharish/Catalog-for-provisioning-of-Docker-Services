@@ -2,9 +2,16 @@
 import cgi,cgitb
 import configure as cf
 import MySQLdb
+import FetchCookie as fc
 cgitb.enable()
-print("Content-Type: text/html\n\r\n\r")
+print("Content-Type: text/html\r\n\r\n")
 print("")
+
+def getUserName(cursor):
+	cookie = fc.getCookieValue()
+	check = cursor.execute('select username from session where session_id = "%s"'%cookie)
+	username = cursor.fetchone()[0]
+	return username
 
 def connectdb():
 	db=MySQLdb.connect("172.10.20.1","root","123456","minor_db")
@@ -14,7 +21,8 @@ def connectdb():
 def fetchValue():
 	form=cgi.FieldStorage()
 	ch=form.getvalue("choose")
-	return ch
+	name=form.getvalue("name")
+	return ch,name
 
 if __name__=="__main__":
 	db,cursor=connectdb()
@@ -25,9 +33,10 @@ if __name__=="__main__":
                 <body>""")
 	try:
 		if db:
-			ch=fetchValue()
+			uname=getUserName(cursor)
+			ch,name=fetchValue()
 			if ch=="addpy":
-				d=cf.runpy("ankpathak",cursor)
+				d=cf.runpy(uname,name,cursor)
 				if d!=0:
 					print("""<p>Name: %s
 						    Id: %s
@@ -36,7 +45,7 @@ if __name__=="__main__":
 					db.commit()
 					db.close()
 			elif ch=="addphp":
-				d=cf.runphp("ankpathak",cursor)
+				d=cf.runphp(uname,name,cursor)
 				if d!=0:
 					print("""<p>Name: %s
                                 	            Id: %s
