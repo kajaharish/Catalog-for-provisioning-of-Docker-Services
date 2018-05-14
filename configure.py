@@ -9,11 +9,10 @@ def insertdbpy(cursor,name,uname,cid,cip,stime,etime,web,db,php,py,utime):
                 return 0
 
 def runpy(uname,name,cursor):
-	a=commands.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker run -dt --network=mynet0 --name=%s ggandhi27/apache_with_python_cgi"%name)
+	a=commands.getoutput("sshpass -p 123456 ssh -o StrictHostKeyChecking=no root@10.42.0.1 docker run -dt --name=%s ggandhi27/apache_with_python_cgi"%name)
 	a=a[78:]
 	if a:
 		print("<p>Container started.</p><br>")
-		print(a)
 	d=dict()
 	d=inspectpy(name)
 	chk=insertdbpy(cursor,name,uname,d["ID"],d["IP"],d["Stime"],d["Etime"],1,0,0,1,"0")
@@ -25,13 +24,12 @@ def runpy(uname,name,cursor):
 		return 0
 
 def inspectpy(contId):
-	print "<br><br>"
-	cmd = "sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker container inspect"
+	cmd = "sshpass -p 123456 ssh -o StrictHostKeyChecking=no root@10.42.0.1 docker container inspect"
 	cmd1=cmd+" "+contId
-	print("<br><br>")
 	tmp = commands.getoutput(cmd1)
-	print("<br><br>")
 	tmp1=tmp[78:]
+	print(tmp1)
+	print("<br><br>")
 	fp=open("/tmp/runpy.json","w")
 	fp.write(tmp1)
 	fp.close()
@@ -40,7 +38,7 @@ def inspectpy(contId):
 	fp.close()
 	d=dict()
 	d["ID"]=b[0]["Id"]
-	d["IP"]=b[0]["NetworkSettings"]["Networks"]["mynet0"]["IPAddress"]
+	d["IP"]=b[0]["NetworkSettings"]["Networks"]["bridge"]["IPAddress"]
 	d["Status"]=b[0]["State"]["Status"]
 	d["Stime"]=b[0]["State"]["StartedAt"]
 	d["Etime"]=b[0]["State"]["FinishedAt"]
@@ -59,7 +57,7 @@ def insertdbphp(cursor,name,uname,cid,cip,stime,etime,web,db,php,py,utime):
                 return 0
 
 def runphp(uname,name,cursor):
-	a=commands.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker run -dt --network=mynet0 --name=%s ggandhi27/apache_with_php"%name)
+	a=commands.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker run -dt --name=%s ggandhi27/apache_with_php"%name)
 	a=a[78:]
 	if a:
 		print("Container running.")
