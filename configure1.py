@@ -13,10 +13,8 @@ class Container:
 		php=0
 		python=0
 		status=None
-		passw="Cascaders1@3"
-		ipw="root@127.0.0.1"
 		
-'''	def insertdbpy(cursor,name,uname,cid,cip,stime,etime,web,db,php,py,utime):
+	def insertdbpy(cursor,name,uname,cid,cip,stime,etime,web,db,php,py,utime):
         	sql=('insert into container values("%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s")'%(name,uname,cid,cip,stime,etime,web,db,php,py,utime))
         	chk=cursor.execute(sql)
         	if chk==1L:
@@ -111,7 +109,6 @@ class Container:
 			return d
 		else:
 			return 0
-'''
 #fetching data from form
 	def fetchValue():
 		form=cgi.FieldStorage()

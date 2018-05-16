@@ -13,7 +13,7 @@ class Python(Container):
         	        return 0
 
 	def runpy(self,uname,cursor):
-		a=commands.getoutput("sshpass -p %s ssh -o StrictHostKeyChecking=no %s docker run -dt --name=%s ggandhi27/apache_with_python_cgi"%(self.passw,self.ipw,self.container_name))
+		a=commands.getoutput("sshpass -p 123456 ssh -o StrictHostKeyChecking=no root@10.42.0.1 docker run -dt --name=%s ggandhi27/apache_with_python_cgi"%self.container_name)
 		a=a[78:]
 		if a:
 			print("<p>Container started.</p><br>")
@@ -27,10 +27,12 @@ class Python(Container):
 			return 0
 
 	def inspectpy(self):
-		cmd = "sshpass -p %s ssh -o StrictHostKeyChecking=no %s docker container inspect"%(self.passw,self.ipw)
+		cmd = "sshpass -p 123456 ssh -o StrictHostKeyChecking=no root@10.42.0.1 docker container inspect"
 		cmd1=cmd+" "+self.container_name
 		tmp = commands.getoutput(cmd1)
 		tmp1=tmp[78:]
+		print(tmp1)
+		print("<br><br>")
 		fp=open("/tmp/runpy.json","w")
 		fp.write(tmp1)
 		fp.close()
@@ -62,7 +64,7 @@ class Php(Container):
 	                return 0
 
 	def runphp(self,uname,cursor):
-		a=commands.getoutput("sshpass -p %s ssh -o StrictHostKeyChecking=no %s docker run -dt --name=%s ggandhi27/apache_with_php"%(self.passw,self.ipw,self.container_name)
+		a=commands.getoutput("sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker run -dt --name=%s ggandhi27/apache_with_php"%self.container_name)
 		a=a[78:]
 		if a:
 			print("Container running.")
@@ -76,7 +78,7 @@ class Php(Container):
 			return 0
 
 	def inspectphp(self):
-		cmd = "sshpass -p %s ssh -o StrictHostKeyChecking=no %s docker container inspect"%(self.passw,self.ipw)
+		cmd = "sshpass -p Cascaders1@3 ssh -o StrictHostKeyChecking=no root@127.0.0.1 docker container inspect"
 		cmd1=cmd+" "+self.container_name
 		tmp = commands.getoutput(cmd1)
 		tmp1=tmp[78:]
@@ -100,9 +102,8 @@ class Php(Container):
 
 if __name__=="__main__":
 	dbase=Database()
-	dbase.connect(self)
 	try:
-		if dbase.dbpointer:
+		if dbase.db:
 			con=Container()
 			uname=con.getUserName(dbase.cursor)
 			ch=con.fetchValue()
@@ -115,8 +116,8 @@ if __name__=="__main__":
 							    Id: %s
 							    Status: %s	
 							    IP: %s  </p>"""%(d["Name"],d["ID"],d["Status"],d["IP"]))
-					dbase.commit(self)
-					dbase.close(self)
+					dbase.db.commit()
+					dbase.db.close()
 			elif ch=="addphp":
 				php=Php()
 				php.fetchname(self)
@@ -126,14 +127,14 @@ if __name__=="__main__":
                 	               	            Id: %s
                 	               	            Status: %s  
                 	               	            IP: %s  </p>"""%(d["Name"],d["ID"],d["Status"],d["IP"]))
-					dbase.commit(self)
-					dbase.close(self)
+					dbase.db.commit()
+					dbase.db.close()
 		else:
 			print("<p>There is some problem in database connectivity.</p>")
 		print("""</body>
 			</html>""")
 	except Exception as e:
 		print(e)
-		dbase.rollback(self)
-		dbase.close(self)
+		dbase.db.rollback()
+		dbase.db.close()
 		print("Wuhuuu!!")	
