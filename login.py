@@ -1,13 +1,10 @@
 #!/usr/bin/python2
+
+from ConnectDatabase import Database as DB
 import cgi, cgitb
 import MySQLdb
 import RandomKeyGenerator as rkg
 import CookieGenerator as cookie
-
-def connectDB():
-    db = MySQLdb.connect("172.10.20.1","root","123456","minor_db")
-    cursor = db.cursor()
-    return (db,cursor)
 
 
 def fetchDetails():
@@ -17,19 +14,19 @@ def fetchDetails():
     return (username,password)
 
 
-def login(db,cursor,username,password):
+def login(db,username,password):
     try:
         #Execute the SQL command
         sql = ('select * from user where username = "%s" and password = "%s"'%(username,password))
-        chk = cursor.execute(sql)
+        chk = db.cursor.execute(sql)
         if chk == 1L:
             #Generate Session id.
-            user_check = checkUser(cursor,username)
+            user_check = checkUser(db.cursor,username)
             if user_check == 1:
                 ssn = 0
                 while ssn == 0:
                     session_id = rkg.randomKey()
-                    ssn_chk = checkSessionId(cursor,session_id)
+                    ssn_chk = checkSessionId(db.cursor,session_id)
                     if ssn_chk == 1:
                         ssn = 1
                         break
@@ -37,7 +34,7 @@ def login(db,cursor,username,password):
                 cookie.genCookie(session_id)
                 print "Content-type:text/html\r\n\r\n"
                 #Update the cookie in the sessions table.
-                createSession(db,cursor,session_id,username)
+                createSession(db,session_id,username)
                 print ("Login Successfull")
             else:
                 print "Content-type:text/html\r\n\r\n"
@@ -45,7 +42,7 @@ def login(db,cursor,username,password):
         else:
             print ("Please check the username or password")
     except Exception as e:
-        db.rollback()
+        db.db.rollback()
         print "Not updated"
 
 
@@ -67,32 +64,30 @@ def checkUser(cursor,username):
         return 1
 
 
-def createSession(db,cursor,session_id,username):
+def createSession(db,session_id,username):
     sql = ("insert into session values ('%s','%s')")%(session_id,username)
     try:
-        cursor.execute(sql)
-        db.commit()
+        db.cursor.execute(sql)
+        db.db.commit()
         return 1
     except:
-        db.rollback()
+        db.db.rollback()
         print ("Not able to start the session.")
         return 0
 
 
-def closeDB(db):
-    db.close()
 
 
 if __name__=="__main__":
+
+
     cgitb.enable()
-    db = None
-    cursor = None
+    db = DB()
     username = None
     password = None
-    db,cursor = connectDB()
-    if db:
+    if db.db:
         username,password = fetchDetails()
-        login(db,cursor,username,password)
-        closeDB(db)
+        login(db,username,password)
+        db.close()
     else:
         print ("Not able to connect to the database")
