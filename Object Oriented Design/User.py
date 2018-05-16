@@ -1,7 +1,5 @@
 from ConnectDatabase import Database
-
 class User:
-
     def __init__(self):
         self.username = None
         self.firstName = None
@@ -13,40 +11,22 @@ class User:
         self.email = None
         self.database = Database()
         self.database.connect()
-
-    '''
-    def __init__(self,uname,fname,lname,passw,addr,ques,ans,email):
-        self.username = uname
-        self.firstName = fname
-        self.lastName = lname
-        self.password = passw
-        self.address = addr
-        self.question = ques
-        self.answer = ans
-        self.email = email
-        self.database = Database()
-        self.database.connect()
-    '''
-
+    
     def addUser(self):
-        
-        sql = ('INSERT INTO user VALUES ("%s","%s","%s","%s","%s","%s","%s","%s")' )% (self.username,self.firstName,self.lastName,self.password,self.address,self.question,self.answer,self.email)
-
+        sql = ('INSERT INTO user VALUES ("%s","%s","%s","%s","%s","%s","%s","%s")' )%(self.username,self.firstName,self.lastName,self.password,self.address,self.question,self.answer,self.email)
         return self.database.execute(sql)
-
-
+    
     def closeConnection(self):
         self.database.close()
 
 
     def createDatabaseUser(self):
-        sql = ('create user "%s"@"172.17.0.1" identified by "%s"'%(username,password))
-        print sql 
+        sql = ('create user "%s"@"172.17.0.1" identified by "%s"'%(self.username,self.password))
         return self.database.execute(sql)
-
+    
     def getUsername(self):
         return self.username
-
+    
     def isUserExisting(self):
         try:
             chk = self.database.cursor.execute('select * from user where username = "%s" or email = "%s"'%(self.username,self.email))
@@ -66,5 +46,12 @@ class User:
                 return 0
             else:
                 return 1
+        except:
+            return -1
+
+    def deleteUser(self):
+        try:
+            sql = 'delete from user where username="%s"'%(self.username)
+            return self.database.execute()
         except:
             return -1
