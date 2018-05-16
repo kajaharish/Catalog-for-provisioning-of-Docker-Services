@@ -27,16 +27,14 @@ class Dashboard:
 
 #Code is needed to be completed from here.
         for x in result:
-            
-
-        '''
-        <div class="cont">
-        <img src="images/container.png" alt="Avatar" class="image" >Container 1
-        <div class="middle" value="container">
-        <div class="text">File manager</div>
-        </div>
-        </div>
-        '''
+        	print '''
+        	<div class="cont">
+        	<img src="images/container.png" alt="Avatar" class="image" >Container 1
+        	<div class="middle" value="container">
+        	<div class="text">File manager</div>
+        	</div>
+        	</div>
+        	'''
 
 
 if __name__ == "__main__":
@@ -44,17 +42,15 @@ if __name__ == "__main__":
     dashboard = Dashboard()
     dashboard.getCookieValue()
     dashboard.getUserName()
-    dashboard.generateContainer()
+    #dashboard.generateContainer()
+    print '''
 
-
-'''
-    print 
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
 <!--[if gt IE 8]><!--> 
-	
+		
 <html class="no-js" lang=""> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
@@ -66,15 +62,15 @@ if __name__ == "__main__":
     <link rel="apple-touch-icon" href="apple-icon.png">
     <link rel="shortcut icon" href="favicon.ico">
 
-    <link rel="stylesheet" href="./css/normalize.css" type="text/css">
-    <link rel="stylesheet" href="./css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="./css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="./css/themify-icons.css" type="text/css">
-	<link rel="stylesheet" href="./scripts/css/style2.css" type="text/css">
-    <link rel="stylesheet" href="./css/flag-icon.min.css" type="text/css">
-    <link rel="stylesheet" href="./css/cs-skin-elastic.css" type="text/css">
+    <link rel="stylesheet" href="/css/normalize.css" type="text/css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/themify-icons.css" type="text/css">
+	<link rel="stylesheet" href="/css/style2.css" type="text/css">
+    <link rel="stylesheet" href="/css/flag-icon.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/cs-skin-elastic.css" type="text/css">
     <!-- <link rel="stylesheet" href="assets/css/bootstrap-select.less"> -->
-    <link rel="stylesheet" href="./css/style.css" type="text/css">
+    <link rel="stylesheet" href="/scss/style.css" type="text/css">
     
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
@@ -109,7 +105,7 @@ if __name__ == "__main__":
                     <!-- </li> -->
 					
 					<li>
-                        <a href="delete.html"> <i class="menu-icon fa fa-trash-o"></i>Delete Container</a>
+                        <a href="../html/delete.html"> <i class="menu-icon fa fa-trash-o"></i>Delete Container</a>
                     </li>
 					
 					<li>
@@ -183,19 +179,19 @@ if __name__ == "__main__":
         </div>
 	
 	<!--main body end-->
-'''
+    '''
 
 #This portion of code generates containers at the runtime.
-'''
-        <div class="cont">
-			<img src="images/container.png" alt="Avatar" class="image" >Container 1
-				<div class="middle" value="container">
-					<div class="text">File manager</div>
-				</div>
-		</div>
-'''
-
-'''
+    #print '''
+    #    <div class="cont">
+	#	<img src="images/container.png" alt="Avatar" class="image" >Container 1
+	#			<div class="middle" value="container">
+	#				<div class="text">File manager</div>
+	#			</div>
+	#	</div>
+    #'''
+    dashboard.generateContainer()
+    print'''
 		
     </div><!-- /#right-panel -->
 
