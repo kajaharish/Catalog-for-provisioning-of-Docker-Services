@@ -34,3 +34,15 @@ class Session:
     def deleteSession(self):
         sql = 'delete from session where username = "%s"'%username
         a = self.database.execute(sql)
+
+    def checkUserSession(self):
+        try:
+            sql = 'select * from session where username = "%s"'%(username)
+            check = self.database.cursor.execute(sql)
+
+            if check == 1L:
+                return 0
+            else:
+                return 1
+        except:
+            return -1
