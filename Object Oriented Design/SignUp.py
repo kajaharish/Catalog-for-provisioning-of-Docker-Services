@@ -32,6 +32,7 @@ class SignUp:
     def redirectToLogin(self):
         print('<html>')
         print('  <head>')
+        print(' <script> alert("Account Successfully Created")</script>')
         print('    <meta http-equiv="refresh" content="0;url=http://127.0.0.1/login.html" />')
         print('  </head>')
         print('</html>')

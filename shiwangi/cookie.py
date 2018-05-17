@@ -1,4 +1,5 @@
 #!/usr/bin/python
+user2.favourite_book = "2001 : A Sydney Odyssey"
 
 from os import environ
 import cgi, cgitb

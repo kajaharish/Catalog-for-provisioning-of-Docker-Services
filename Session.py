@@ -19,14 +19,14 @@ class Session:
                 break
             self.randomKey.getRandomKey()
             chk == self.checkSessionId()
-        self.sessionId = self.randomKey.randomKey
-        sql = ("insert into session values ('%s','%s')")%(self.sessionId,self.username)
+        
+        sql = ("insert into session values ('%s','%s')")%(session_id,username)
         try:
             self.database.cursor.execute(sql)
-            self.database.commit()
+            self.db.db.commit()
             return 1
         except:
-            self.database.rollback()
+            self.db.db.rollback()
             print ("Not able to start the session.")
             return 0
         
@@ -42,13 +42,14 @@ class Session:
             return -1
 
     def deleteSession(self):
-        sql = 'delete from session where username = "%s"'%self.username
+        sql = 'delete from session where username = "%s"'%username
         a = self.database.execute(sql)
 
     def checkUserSession(self):
         try:
-            sql = 'select * from session where username = "%s"'%(self.username)
+            sql = 'select * from session where username = "%s"'%(username)
             check = self.database.cursor.execute(sql)
+
             if check == 1L:
                 return 0
             else:
