@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>
+			Database Access Terminal
+		</title>
+		<style type="text/css">
+			textarea 
+			{
+				width: 100%; 
+				margin: 0;
+				padding: 0;
+				border-width: 10; 
+				resize: none;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Database Access Terminal</h1>
+		<form action="/scripts/mySqlUI.py" method="POST">
+			<textarea rows="10" cols="20" wrap="hard" name="query"required autofocus>Erase me to type in your queries.</textarea>
+			</br>
+			<input type="submit" placeholder="Execute" name="execute">
+		</form>
+	</body>
+</html>

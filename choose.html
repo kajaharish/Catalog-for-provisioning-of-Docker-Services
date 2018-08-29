@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<head lan="en">
+	<title>Choose what to perform</title>
+</head>
+<body>
+	<p>Choose an option from below :-</p><br>
+	<form action="/cgi-bin/choose.py" method="post">
+		<input type="radio" name="choose" value="addpy">Add a new python container<br>
+		<input type="radio" name="choose" value="addphp">Add a new php container<br>
+		<input type="radio" name="choose" value="start">Start an existing container<br>
+		<input type="radio" name="choose" value="stop">Stop a container<br>
+		<input type="radio" name="choose" value="remove">Remove a container<br>
+		<input type="submit" name="sub" value="sub">
+	</form>
+</body>
+</html>

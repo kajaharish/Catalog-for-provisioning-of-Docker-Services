@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head> 
+	<title> Welcome</title>
+	<meta charset="UTF-8">
+		
+	<link rel="stylesheet" type="text/css" href="style2.css">
+	
+</head>
+
+<body>
+	
+	<div class="container-login100" style="background-color:#B0ADB0">
+		<div class="wrap-login100">
+			<h2 style="font-family:Arial"> <CENTER>WELCOME<center></h2>
+			<br>
+			<br>
+			<br>
+			<br>
+			
+			<form action ="/scripts/signup.py" method="post">
+			<div class="wrap-input100">
+				<input class="input100" type="text" name="fname" placeholder="First Name">
+			</div>
+			<div class="wrap-input100">
+				<input class="input100" type="text" name="lname" placeholder="Last Name">
+			</div>
+			
+			<div class="wrap-input100">
+				<input class="input100" type="text" name="username" placeholder="Username">
+			</div>
+			
+			<div class="wrap-input100">
+				<input class="input100" type="text" name="email" placeholder="Email">
+				
+			</div>
+			
+			<div class="wrap-input100">
+				<input class="input100" type="password" name="password" placeholder="Password">
+			</div>
+			
+			<div class="wrap-input100">
+				<input class="input100" type="text" name="address" placeholder="Address">
+			</div>
+			<!--Start Drop down list-->
+			<div class="drop-down">
+				Security Question: 
+				<select name = "ques">
+					<option value="In Which city you were born ?">In Which city you were born ?</option>
+					<option value="What's Your Nickname ?">What's Your Nickname ?</option>
+					<option value="What's the company name of your first Mobile device?">What's the company name of your first Mobile device?</option>
+				</select>
+				<br>
+				<br>
+				<div class="wrap-input100">
+					<input class="input100" type="text" name="answer" placeholder="Answer">
+				</div>
+				
+				
+			</div>
+			<!--End Drop Down list-->
+			
+			<center>
+			<!-- <div class="oval"> -->
+			<br>
+				<button class="oval100"type="submit" value="Signup" style="color:white">Signup  </button>
+			<!-- </div> -->
+			</center>
+			
+			
+			</form>
+			
+		</div> 
+	</div>
+
+</body>
